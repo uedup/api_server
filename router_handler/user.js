@@ -18,18 +18,19 @@ exports.regUser = (req, res) => {
 
     const sql = `select * from ev_users where username=?`
     db.query(sql, [userinfo.username], function (err, results) {
-        // 执行 SQL 语句失败
-        if (err) {
-          return res.send({ status: 1, message: err.message })
-        }
-        // 用户名被占用
-        if (results.length > 0) {
-          return res.send({ status: 1, message: '用户名被占用，请更换其他用户名！' })
-        }
-        // TODO: 用户名可用，继续后续流程...
+      // 执行 SQL 语句失败
+      if (err) {
+        return res.send({ status: 1, message: err.message })
+      }
+      // 用户名被占用
+      if (results.length > 0) {
+        return res.send({ status: 1, message: '用户名被占用，请更换其他用户名！' })
+      }
+      // TODO: 用户名可用，继续后续流程...
+      return res.send({ status: 1, message: 'TODO: 用户名可用，继续后续流程' })
     })
 
-    // res.send('reguser OK')
+    
   }
   
   // 登录的处理函数
