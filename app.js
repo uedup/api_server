@@ -15,11 +15,12 @@ app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api', userRouter)
-// app.get('/hello',(req,res) => {
-//     console.log(req);
-//     res.send('reguser OK')
-//     }
-// )
+
+app.get('/hello',(req,res) => {
+    console.log(req);
+    res.send('app_server is OK！')
+    }
+)
 
 // 调用 app.listen 方法，指定端口号并启动web服务器
 app.listen(3007, function () {
