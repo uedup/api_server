@@ -5,6 +5,8 @@
 //导入数据库操作模块
 const db = require('../db/index')
 
+//使用 bcryptjs 对用户密码进行加密
+const bcrypt = require('bcryptjs')
 
 // 注册用户的处理函数
 exports.regUser = (req, res) => {
@@ -16,18 +18,18 @@ exports.regUser = (req, res) => {
         return res.send({ status: 1, message: '用户名或密码不能为空!!!' })
     }
 
-    const sql = `select * from ev_users where username=?`
-    db.query(sql, [userinfo.username], function (err, results) {
+    // 对用户的密码,进行 bcrype 加密，返回值是加密之后的密码字符串
+    userinfo.password = bcrypt.hashSync(userinfo.password, 10)
+    const sql = 'insert into ev_users set ?'
+    db.query(sql, { username: userinfo.username, password: userinfo.password }, function (err, results) {
       // 执行 SQL 语句失败
-      if (err) {
-        return res.send({ status: 1, message: err.message })
+      if (err) return res.send({ status: 1, message: err.message })
+      // SQL 语句执行成功，但影响行数不为 1
+      if (results.affectedRows !== 1) {
+        return res.send({ status: 1, message: '注册用户失败，请稍后再试！' })
       }
-      // 用户名被占用
-      if (results.length > 0) {
-        return res.send({ status: 1, message: '用户名被占用，请更换其他用户名！' })
-      }
-      // TODO: 用户名可用，继续后续流程...
-      return res.send({ status: 1, message: 'TODO: 用户名可用，继续后续流程' })
+      // 注册成功
+      res.send({ status: 0, message: '注册成功！' })
     })
 
     
