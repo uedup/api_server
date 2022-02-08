@@ -46,7 +46,7 @@ exports.regUser = (req, res) => {
     const sql = 'select * from ev_users where username= ?'
 
     db.query(sql, userinfo.username, function (err, results) {
-      console.log(userinfo.username)
+
       // 执行 SQL 语句失败
       if (err) return res.cc(err)
       // SQL 语句执行成功，但影响行数不为 1

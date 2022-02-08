@@ -1,6 +1,8 @@
 // 导入 express 模块
 const express = require('express')
 const userRouter = require('./router/user')
+// 导入并使用用户信息路由模块
+const userinfoRouter = require('./router/userinfo')
 
 // 创建 express 的服务器实例
 const app = express()
@@ -40,6 +42,8 @@ app.use((req,res,next) => {
 app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\//] }))
 
 app.use('/api', userRouter)
+// 注意：以 /my 开头的接口，都是有权限的接口，需要进行 Token 身份认证
+app.use('/my', userinfoRouter)
 
 app.get('/hello',(req,res) => {
     res.send('app_server is OK！')
