@@ -5,6 +5,8 @@ const userRouter = require('./router/user')
 // 创建 express 的服务器实例
 const app = express()
 
+const joi = require('joi');
+
 // 导入 cors 中间件
 const cors = require('cors')
 // 将 cors 注册为全局中间件
@@ -26,16 +28,22 @@ app.use((req,res,next) => {
   };
   
   next()
-}
-)
+})
 
 app.use('/api', userRouter)
 
 app.get('/hello',(req,res) => {
-    console.log(req);
     res.send('app_server is OK！')
     }
 )
+
+// 全局错误级别中间件中，捕获验证失败的错误，并把验证失败的结果响应给客户端
+app.use(function (err, req, res, next) {
+  // 数据验证失败
+  if (err instanceof joi.ValidationError) return res.cc(err)
+  // 未知错误
+  res.cc(err)
+})
 
 // 调用 app.listen 方法，指定端口号并启动web服务器
 app.listen(3007, function () {
