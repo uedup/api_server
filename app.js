@@ -27,11 +27,12 @@ app.use(express.urlencoded({ extended: false }))
 app.use((req,res,next) => {
   res.cc =(error,status=1) => {
     // status = 0 为成功； status = 1 为失败； 默认将 status 的值设置为 1，方便处理失败的情况
+    const msg = status? 'error':'message'
     res.send({
       // 状态
       status,
       // 状态描述，判断 err 是 错误对象 还是 字符串
-      error:error instanceof Error?error.message:error
+      message:error instanceof Error?error.message:error
     })
   };
   

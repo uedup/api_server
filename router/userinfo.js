@@ -17,6 +17,7 @@ router.get('/userinfo',userHandler.getUserInfo)
 router.post('/userinfo',expressJoi(update_userinfo_schema), userHandler.updateUserInfo)
 //更新用户密码
 router.post('/update/pwd',expressJoi(update_updatepwd_schema), userHandler.updatepwd)
+//更新用户头像
 router.post('/update/avatar',expressJoi(update_updateavatar_schema), userHandler.updateavatar)
 
 // 将路由对象共享出去
