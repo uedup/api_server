@@ -1,9 +1,5 @@
 // 导入 express 模块
 const express = require('express')
-const userRouter = require('./router/user')
-// 导入并使用用户信息路由模块
-const userinfoRouter = require('./router/userinfo')
-
 // 创建 express 的服务器实例
 const app = express()
 
@@ -11,7 +7,6 @@ const joi = require('joi');
 
 // 导入配置文件
 const config = require('./jwt/config')
-
 // 解析 token 的中间件
 const expressJWT = require('express-jwt')
 
@@ -22,6 +17,12 @@ app.use(cors())
 
 //配置解析 application/x-www-form-urlencoded 格式的表单数据的中间件
 app.use(express.urlencoded({ extended: false }))
+
+const userRouter = require('./router/user')
+// 导入并使用用户信息路由模块
+const userinfoRouter = require('./router/userinfo')
+// 导入并使用文章分类路由模块
+const artCateRouter = require('./router/artcate')
 
 // 响应数据的中间件,优化res.send
 app.use((req,res,next) => {
@@ -46,10 +47,9 @@ app.use('/api', userRouter)
 // 注意：以 /my 开头的接口，都是有权限的接口，需要进行 Token 身份认证
 app.use('/my', userinfoRouter)
 
-app.get('/hello',(req,res) => {
-    res.send('app_server is OK！')
-    }
-)
+// 为文章分类的路由挂载统一的访问前缀 /my/article
+app.use('/my/article', artCateRouter)
+
 
 // 全局错误级别中间件中，捕获验证失败的错误，并把验证失败的结果响应给客户端
 app.use(function (err, req, res, next) {
